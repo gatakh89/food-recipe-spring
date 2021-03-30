@@ -1,10 +1,13 @@
-package com.example.mypageservice.user.Recipe;
+package com.example.mypageservice.UserPurchaseOreder;
+
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,19 +19,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class RecipeFile {
+public class OrderProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	private String fileName;
-	private String contentType;
-	private long recipeId;
+	private Long purchaseOrderId;
 
-//	public String getDataUrl() {
-//		return "http://localhost:8080" + "/recipe-files/" + this.id;
-//	}
-
-	private String dataUrl;
-
+	private long productId;
+	private String productName;
+	private String productTitleImage;
+	private long productPrice;
 }

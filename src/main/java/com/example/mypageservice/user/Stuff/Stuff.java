@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Stuff {
 	@Id
-	private String name;
+	private String stuffName;
 
 }

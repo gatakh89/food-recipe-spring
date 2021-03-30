@@ -38,6 +38,7 @@ public class Recipe {
 	private String tip;
 	private String Explanation;
 	private String category;
+	private String dataUrl;
 
 	@OneToMany
 	@JoinColumn(name = "recipeId")

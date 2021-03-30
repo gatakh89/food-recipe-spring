@@ -43,6 +43,7 @@ public class RecipeController {
 	private CategoryRepository CateRepo;
 	private RecipeFileRepsitory ReFiRepo;
 	private final Path FILE_PATH = Paths.get("recipe_file");
+	private RecipeOrderService service;
 
 	@Autowired
 	private ApiConfiguration apiConfig;
@@ -51,13 +52,14 @@ public class RecipeController {
 
 	public RecipeController(RecipeRepository RecipeRepo, StuffRepository StuffRepo, CategoryRepository CateRepo,
 			RecipeProcedureFileRepository procedureRepo, RecipeFileRepsitory ReFiRepo,
-			RecipeProcedureRepository proRepo) {
+			RecipeProcedureRepository proRepo, RecipeOrderService service) {
 		this.procedureRepo = procedureRepo;
 		this.ReFiRepo = ReFiRepo;
 		this.StuffRepo = StuffRepo;
 		this.RecipeRepo = RecipeRepo;
 		this.CateRepo = CateRepo;
 		this.proRepo = proRepo;
+		this.service = service;
 	}
 
 	@RequestMapping(value = "/recipe", method = RequestMethod.GET)
@@ -83,7 +85,7 @@ public class RecipeController {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set("Content-Type", feedFile.getContentType() + ";charset=UTF-8");
-		// inline: 뷰어로, attachement: 내려받기
+
 		responseHeaders.set("Content-Disposition",
 				"inline; filename=" + URLEncoder.encode(feedFile.getFileName(), "UTF-8"));
 
@@ -105,20 +107,31 @@ public class RecipeController {
 
 	@RequestMapping(value = "/recipe/{userId}", method = RequestMethod.GET)
 	public List<Recipe> getRecipeByUserId(@PathVariable("userId") long userId) {
+
 		return RecipeRepo.findByUserId(userId);
 
 	}
 
 	@RequestMapping(value = "/recipes/{recipeId}", method = RequestMethod.GET)
 	public List<Recipe> getRecipeByRecipeId(@PathVariable("recipeId") long recipeId) {
-		return RecipeRepo.findByRecipeId(recipeId);
+		List<Recipe> list = RecipeRepo.findByRecipeId(recipeId);
+
+		for (Recipe recipe : list) {
+			for (RecipeFile Recipefile : recipe.getRecipefile()) {
+				Recipefile.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + Recipefile.getId());
+
+			}
+		}
+
+		return list;
 
 	}
 
 	@RequestMapping(value = "/recipe", method = RequestMethod.POST)
 	public Recipe addRecipe(@RequestBody Recipe recipe) {
-
 		RecipeRepo.save(recipe);
+//		service.sendOrder(recipe);
+
 		return recipe;
 
 	}
@@ -183,45 +196,46 @@ public class RecipeController {
 //		return feedFiles;
 //	}
 
-//	@RequestMapping(value = "/recipe/{id}/recipe-files", method = RequestMethod.DELETE)
-//	public boolean removeRecipeFiles(@PathVariable("id") long id, HttpServletResponse res) {
-//
-//		if (RecipeRepo.findById(id).orElse(null) == null) {
-//			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//			return false;
-//		}
-//
-//		List<RecipeFile> recipeFiles = ReFiRepo.findByRecipeId(id);
-//		for (RecipeFile recipeFile : recipeFiles) {
-//			ReFiRepo.delete(recipeFile);
-//			File file = new File(recipeFile.getFileName());
-//			if (file.exists()) {
-//				file.delete();
-//			}
-//		}
-//
-//		return true;
-//	}
-//
-//	@RequestMapping(value = "/recipe/{id}", method = RequestMethod.DELETE)
-//	public boolean removeRecipe(@PathVariable("id") long id, HttpServletResponse res) {
-//		System.out.println(id);
-//
-//		Recipe recipe = RecipeRepo.findById(id).orElse(null);
-//
-//		if (recipe == null) {
-//			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//			return false;
-//		}
-//
-//		List<RecipeFile> files = ReFiRepo.findByRecipeId(id);
-//		for (RecipeFile file : files) {
-//			ReFiRepo.delete(file);
-//		}
-//
-//		RecipeRepo.deleteById(id);
-//
-//		return true;
-//	}
+	@RequestMapping(value = "/recipe/{id}/recipe-files", method = RequestMethod.DELETE)
+	public boolean removeRecipeFiles(@PathVariable("id") long id, HttpServletResponse res) {
+
+		if (RecipeRepo.findById(id).orElse(null) == null) {
+			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return false;
+		}
+
+		List<RecipeFile> recipeFiles = ReFiRepo.findByRecipeId(id);
+		for (RecipeFile recipeFile : recipeFiles) {
+			ReFiRepo.delete(recipeFile);
+			File file = new File(recipeFile.getFileName());
+			if (file.exists()) {
+				file.delete();
+			}
+		}
+
+		return true;
+	}
+
+	@RequestMapping(value = "/recipe/{id}", method = RequestMethod.DELETE)
+	public boolean removeRecipe(@PathVariable("id") long id, HttpServletResponse res) {
+		System.out.println(id);
+
+		Recipe recipe = RecipeRepo.findById(id).orElse(null);
+
+		if (recipe == null) {
+			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return false;
+		}
+
+		List<RecipeFile> files = ReFiRepo.findByRecipeId(id);
+		for (RecipeFile file : files) {
+			ReFiRepo.delete(file);
+		}
+
+//		service.sendsOrder(recipe.getRecipeId());
+		RecipeRepo.deleteById(id);
+
+		return true;
+	}
 
 }
