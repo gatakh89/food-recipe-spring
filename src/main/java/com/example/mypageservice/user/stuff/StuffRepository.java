@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.Stuff;
+package com.example.mypageservice.user.stuff;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

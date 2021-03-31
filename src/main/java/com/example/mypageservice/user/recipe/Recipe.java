@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.Recipe;
+package com.example.mypageservice.user.recipe;
 
 import java.util.List;
 
@@ -12,9 +12,8 @@ import javax.persistence.JoinColumn;
 
 import javax.persistence.OneToMany;
 
-import com.example.mypageservice.user.RecipeProcedure.RecipeProcedure;
-
-import com.example.mypageservice.user.Stuff.StuffRecipe;
+import com.example.mypageservice.user.recipeProcedure.RecipeProcedure;
+import com.example.mypageservice.user.stuff.StuffRecipe;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

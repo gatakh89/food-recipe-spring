@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.RecipeProcedure;
+package com.example.mypageservice.user.recipeProcedure;
 
 import java.util.List;
 
@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecipeProcedureFileRepository extends JpaRepository<RecipeProcedureFile, Long> {
 
-	public List<RecipeProcedureFile> findByRecipeId(long procedureId);
+//	public List<RecipeProcedureFile> findByRecipeId(long procedureId);
 }

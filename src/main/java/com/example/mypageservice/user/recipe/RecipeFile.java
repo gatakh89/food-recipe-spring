@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.Recipe;
+package com.example.mypageservice.user.recipe;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +24,8 @@ public class RecipeFile {
 	private String fileName;
 	private String contentType;
 	private long recipeId;
+//	private String imagePath;
+//	private String imageFileName;
 
 //	public String getDataUrl() {
 //		return "http://localhost:8080" + "/recipe-files/" + this.id;

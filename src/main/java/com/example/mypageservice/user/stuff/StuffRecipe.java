@@ -1,13 +1,12 @@
-package com.example.mypageservice.UserPurchaseOreder;
-
-import java.util.List;
+package com.example.mypageservice.user.stuff;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,15 +18,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class OrderProduct {
+public class StuffRecipe {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
-	private Long purchaseOrderId;
+	private String quantity;
+	private String stuffName;
 
-	private long productId;
-	private String productName;
-	private String productTitleImage;
-	private long productPrice;
 }

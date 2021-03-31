@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.Recipe;
+package com.example.mypageservice.user.recipe;
 
 import java.util.List;
 

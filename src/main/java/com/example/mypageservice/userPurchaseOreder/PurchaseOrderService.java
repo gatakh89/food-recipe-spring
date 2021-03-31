@@ -1,22 +1,18 @@
-package com.example.mypageservice.UserPurchaseOreder;
-
-import java.util.ArrayList;
+package com.example.mypageservice.userPurchaseOreder;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PurchaseOrderService {
 
 	private PurchaseOrderRepository orderRepo;
-	private OrderProductRepository productRepo;
 
 	@Autowired
 	public PurchaseOrderService(PurchaseOrderRepository orderRepo, OrderProductRepository productRepo) {
 		this.orderRepo = orderRepo;
-		this.productRepo = productRepo;
+
 	}
 //	// 트랜잭션 처리
 //	// 커밋이 안 된 데이터도 읽을 수 있게 하겠다.
@@ -60,17 +56,12 @@ public class PurchaseOrderService {
 //		return new CreateResponse(savedOrder);
 //	}
 
-	@RabbitListener(queues = "commerce.purchaseorder")
-	public void receiveOrder(PurchaseOrder order) {
-		System.out.println("---- SALES LOG -----");
-		System.out.println(order);
+	@RabbitListener(queues = "Market.purchaseOrder")
+	public void receiveOrder(PurchaseOrder purchaseOrder) {
 
-		PurchaseOrder purchaseOrder = PurchaseOrder.builder().id(order.getId()).orderDate(order.getOrderDate())
-				.orderProduct(order.getOrderProduct())
-
-				.build();
-
-		System.out.println(purchaseOrder);
-		orderRepo.save(purchaseOrder);
+		PurchaseOrder purchaseOrders = PurchaseOrder.builder().id(purchaseOrder.getId())
+				.orderDate(purchaseOrder.getOrderDate()).orderProduct(purchaseOrder.getOrderProduct()).build();
+		System.out.println("------------------" + purchaseOrders);
+		orderRepo.save(purchaseOrders);
 	}
 }

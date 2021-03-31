@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.RecipeProcedure;
+package com.example.mypageservice.user.recipeProcedure;
 
 import java.util.List;
 
@@ -27,9 +27,9 @@ public class RecipeProcedure {
 	private long id;
 	private String recipeProcedureImage;
 	private String recipeProcedure;
-
+//
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "recipeId")
+	@JoinColumn(name = "procedureId")
 	private List<RecipeProcedureFile> RecipeProcedurefile;
 
 }

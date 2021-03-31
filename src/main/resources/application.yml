@@ -25,6 +25,24 @@ spring:
     host: ec2-3-34-127-170.ap-northeast-2.compute.amazonaws.com
     username: rabbitmq
     password: password123
+    
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAIRP7SQLQUEJKPVEA
+      secretKey: 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
+---    
+cloud:
+  aws:
+    s3:
+      bucket: recipeimage-myservice
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      instanceProfile: true
+
 api:
   base-path: http://localhost:8080
   

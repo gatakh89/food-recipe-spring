@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.Recipe;
+package com.example.mypageservice.user.recipe;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,14 +25,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.mypageservice.user.Category.Category;
-import com.example.mypageservice.user.Category.CategoryRepository;
-import com.example.mypageservice.user.RecipeProcedure.RecipeProcedureFile;
-import com.example.mypageservice.user.RecipeProcedure.RecipeProcedureFileRepository;
-import com.example.mypageservice.user.RecipeProcedure.RecipeProcedureRepository;
-import com.example.mypageservice.user.Stuff.Stuff;
-import com.example.mypageservice.user.Stuff.StuffRepository;
+import com.example.mypageservice.user.category.Category;
+import com.example.mypageservice.user.category.CategoryRepository;
 import com.example.mypageservice.user.configuration.ApiConfiguration;
+import com.example.mypageservice.user.recipeProcedure.RecipeProcedureFile;
+import com.example.mypageservice.user.recipeProcedure.RecipeProcedureFileRepository;
+import com.example.mypageservice.user.recipeProcedure.RecipeProcedureRepository;
+import com.example.mypageservice.user.stuff.Stuff;
+import com.example.mypageservice.user.stuff.StuffRepository;
 
 @RestController
 public class RecipeController {
@@ -51,8 +51,8 @@ public class RecipeController {
 	@Autowired // UserRepository UserRepo,
 
 	public RecipeController(RecipeRepository RecipeRepo, StuffRepository StuffRepo, CategoryRepository CateRepo,
-			RecipeProcedureFileRepository procedureRepo, RecipeFileRepsitory ReFiRepo,
-			RecipeProcedureRepository proRepo, RecipeOrderService service) {
+			RecipeFileRepsitory ReFiRepo, RecipeProcedureRepository proRepo, RecipeOrderService service,
+			RecipeProcedureFileRepository procedureRepo) {
 		this.procedureRepo = procedureRepo;
 		this.ReFiRepo = ReFiRepo;
 		this.StuffRepo = StuffRepo;
@@ -130,15 +130,17 @@ public class RecipeController {
 	@RequestMapping(value = "/recipe", method = RequestMethod.POST)
 	public Recipe addRecipe(@RequestBody Recipe recipe) {
 		RecipeRepo.save(recipe);
-//		service.sendOrder(recipe);
+//		service.sendsOrder(recipe.getRecipeId(), recipe.getRecipeName(), recipe.getCategory(), recipe.getStuffRecipe());
 
+//		service.sendOrder(recipe);
+		System.out.println("----------------" + recipe);
 		return recipe;
 
 	}
 
 	@RequestMapping(value = "/recipe/{id}/recipe-files", method = RequestMethod.POST)
 	public RecipeFile addRecipeFile(@PathVariable("id") long id, @RequestPart("data") MultipartFile file,
-			HttpServletResponse res) throws IOException {
+			String filePath, HttpServletResponse res) throws IOException {
 
 		if (RecipeRepo.findById(id).orElse(null) == null) {
 			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -159,9 +161,9 @@ public class RecipeController {
 
 	}
 
-	@RequestMapping(value = "/recipe/{id}/ProcedureFile-files", method = RequestMethod.POST)
+	@RequestMapping(value = "/procedure/{id}/files", method = RequestMethod.POST)
 	public RecipeProcedureFile addRecipeProcedureFile(@PathVariable("id") long id,
-			@RequestPart("data2") MultipartFile file, HttpServletResponse res) throws IOException {
+			@RequestPart("data") MultipartFile file, HttpServletResponse res) throws IOException {
 
 		if (proRepo.findById(id).orElse(null) == null) {
 			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -174,7 +176,7 @@ public class RecipeController {
 
 		FileCopyUtils.copy(file.getBytes(), new File(FILE_PATH.resolve(file.getOriginalFilename()).toString()));
 
-		RecipeProcedureFile recipeProcedureFile = RecipeProcedureFile.builder().recipeId(id)
+		RecipeProcedureFile recipeProcedureFile = RecipeProcedureFile.builder().procedureId(id)
 				.fileName(file.getOriginalFilename()).contentType(file.getContentType()).build();
 
 		procedureRepo.save(recipeProcedureFile);

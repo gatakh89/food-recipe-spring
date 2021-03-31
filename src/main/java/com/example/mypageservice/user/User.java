@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-import com.example.mypageservice.user.Recipe.Recipe;
+import com.example.mypageservice.user.recipe.Recipe;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +27,7 @@ public class User {
 	private long userId;
 	private String name;
 	private String email;
+	private String userName;
 
 	@OneToMany
 	@JoinColumn(name = "userId")

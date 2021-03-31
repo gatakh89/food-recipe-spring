@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.Category;
+package com.example.mypageservice.user.category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

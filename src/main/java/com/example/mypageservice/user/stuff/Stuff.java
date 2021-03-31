@@ -1,4 +1,4 @@
-package com.example.mypageservice.user.Stuff;
+package com.example.mypageservice.user.stuff;
 
 import javax.persistence.Entity;
 
