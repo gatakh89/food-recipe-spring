@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 
 import javax.persistence.OneToMany;
 
-import com.example.mypageservice.user.recipeProcedure.RecipeProcedure;
+import com.example.mypageservice.user.recipeprocedure.RecipeProcedure;
 import com.example.mypageservice.user.stuff.StuffRecipe;
 
 import lombok.AllArgsConstructor;
@@ -48,7 +48,7 @@ public class Recipe {
 	private List<StuffRecipe> StuffRecipe;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "recipeId")
+	@JoinColumn(name = "procedureId")
 	private List<RecipeProcedure> recipeProcedure;
 
 }

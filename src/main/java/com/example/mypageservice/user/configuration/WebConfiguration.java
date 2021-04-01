@@ -8,11 +8,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 

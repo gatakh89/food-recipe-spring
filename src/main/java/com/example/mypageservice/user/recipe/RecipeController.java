@@ -28,9 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.mypageservice.user.category.Category;
 import com.example.mypageservice.user.category.CategoryRepository;
 import com.example.mypageservice.user.configuration.ApiConfiguration;
-import com.example.mypageservice.user.recipeProcedure.RecipeProcedureFile;
-import com.example.mypageservice.user.recipeProcedure.RecipeProcedureFileRepository;
-import com.example.mypageservice.user.recipeProcedure.RecipeProcedureRepository;
+import com.example.mypageservice.user.recipeprocedure.RecipeProcedure;
+import com.example.mypageservice.user.recipeprocedure.RecipeProcedureFile;
+import com.example.mypageservice.user.recipeprocedure.RecipeProcedureFileRepository;
+import com.example.mypageservice.user.recipeprocedure.RecipeProcedureRepository;
 import com.example.mypageservice.user.stuff.Stuff;
 import com.example.mypageservice.user.stuff.StuffRepository;
 
@@ -62,7 +63,7 @@ public class RecipeController {
 		this.service = service;
 	}
 
-	@RequestMapping(value = "/recipe", method = RequestMethod.GET)
+	@RequestMapping(value = "/recipes", method = RequestMethod.GET)
 	public List<Recipe> getRecipeList(HttpServletRequest req) {
 		List<Recipe> list = RecipeRepo.findAll();
 		for (Recipe recipe : list) {
@@ -75,22 +76,42 @@ public class RecipeController {
 
 	}
 
-	@RequestMapping(value = "/recipe-files/{id}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> getFeedFile(@PathVariable("id") long id, HttpServletResponse res) throws IOException {
-		RecipeFile feedFile = ReFiRepo.findById(id).orElse(null);
+	@RequestMapping(value = "/recipe-files/{recipeId}", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> getRecipeFile(@PathVariable("recipeId") long recipeId, HttpServletResponse res)
+			throws IOException {
+		RecipeFile recipeFile = ReFiRepo.findById(recipeId).orElse(null);
 
-		if (feedFile == null) {
+		if (recipeFile == null) {
 			return ResponseEntity.notFound().build();
 		}
 
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.set("Content-Type", feedFile.getContentType() + ";charset=UTF-8");
+		responseHeaders.set("Content-Type", recipeFile.getContentType() + ";charset=UTF-8");
 
 		responseHeaders.set("Content-Disposition",
-				"inline; filename=" + URLEncoder.encode(feedFile.getFileName(), "UTF-8"));
+				"inline; filename=" + URLEncoder.encode(recipeFile.getFileName(), "UTF-8"));
 
 		return ResponseEntity.ok().headers(responseHeaders)
-				.body(Files.readAllBytes(FILE_PATH.resolve(feedFile.getFileName())));
+				.body(Files.readAllBytes(FILE_PATH.resolve(recipeFile.getFileName())));
+	}
+
+	@RequestMapping(value = "/procedure-files/{procedureId}", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> getProcedureFile(@PathVariable("procedureId") long procedureId,
+			HttpServletResponse res) throws IOException {
+		RecipeProcedureFile recipeProcedureFile = procedureRepo.findById(procedureId).orElse(null);
+
+		if (recipeProcedureFile == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.set("Content-Type", recipeProcedureFile.getContentType() + ";charset=UTF-8");
+
+		responseHeaders.set("Content-Disposition",
+				"inline; filename=" + URLEncoder.encode(recipeProcedureFile.getFileName(), "UTF-8"));
+
+		return ResponseEntity.ok().headers(responseHeaders)
+				.body(Files.readAllBytes(FILE_PATH.resolve(recipeProcedureFile.getFileName())));
 	}
 
 	@RequestMapping(value = "/stuff", method = RequestMethod.GET)
@@ -118,14 +139,39 @@ public class RecipeController {
 
 		for (Recipe recipe : list) {
 			for (RecipeFile Recipefile : recipe.getRecipefile()) {
+				for (RecipeProcedure recipeProcedure : recipe.getRecipeProcedure()) {
+					for (RecipeProcedureFile recipeProcedureFile : recipeProcedure.getRecipeProcedurefile()) {
+						recipeProcedureFile.setDataUrl(
+								apiConfig.getBasePath() + "/procedure-files/" + recipeProcedureFile.getId());
+					}
+				}
 				Recipefile.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + Recipefile.getId());
-
 			}
+
 		}
 
 		return list;
 
 	}
+
+//	@RequestMapping(value = "/RecipeProcedureFile/{recipeId}", method = RequestMethod.GET)
+//	public List<Recipe> getRecipeProcedureFileRecipeId(@PathVariable("recipeId") long recipeId) {
+//		List<Recipe> list = RecipeRepo.findByRecipeId(recipeId);
+//
+//		for (Recipe recipe : list) {
+//
+//			for (RecipeProcedure recipeProcedure : recipe.getRecipeProcedure()) {
+//				for (RecipeProcedureFile recipeProcedureFile : recipeProcedure.getRecipeProcedurefile()) {
+//					recipeProcedureFile
+//							.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + recipeProcedureFile.getId());
+//				}
+//			}
+//
+//		}
+//
+//		return list;
+//
+//	}
 
 	@RequestMapping(value = "/recipe", method = RequestMethod.POST)
 	public Recipe addRecipe(@RequestBody Recipe recipe) {
@@ -163,7 +209,7 @@ public class RecipeController {
 
 	@RequestMapping(value = "/procedure/{id}/files", method = RequestMethod.POST)
 	public RecipeProcedureFile addRecipeProcedureFile(@PathVariable("id") long id,
-			@RequestPart("data") MultipartFile file, HttpServletResponse res) throws IOException {
+			@RequestPart("data") MultipartFile file, String filePath, HttpServletResponse res) throws IOException {
 
 		if (proRepo.findById(id).orElse(null) == null) {
 			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -185,31 +231,38 @@ public class RecipeController {
 
 	}
 
-//	@RequestMapping(value = "/recipe-files/{id}", method = RequestMethod.GET)
-//	public List<RecipeFile> getFeedFiles(@PathVariable("id") long id, HttpServletResponse res) {
-//
-//		if (RecipeRepo.findById(id).orElse(null) == null) {
-//			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//			return null;
-//		}
-//
-//		List<RecipeFile> feedFiles = ReFiRepo.findByRecipeId(id);
-//
-//		return feedFiles;
-//	}
-
 	@RequestMapping(value = "/recipe/{id}/recipe-files", method = RequestMethod.DELETE)
-	public boolean removeRecipeFiles(@PathVariable("id") long id, HttpServletResponse res) {
+	public boolean removeRecipeFiles(@PathVariable("id") long recipeId, HttpServletResponse res) {
+
+		if (RecipeRepo.findById(recipeId).orElse(null) == null) {
+			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return false;
+		}
+
+		List<RecipeFile> recipeFiles = ReFiRepo.findByRecipeId(recipeId);
+		for (RecipeFile recipeFile : recipeFiles) {
+			ReFiRepo.delete(recipeFile);
+			File file = new File(recipeFile.getFileName());
+			if (file.exists()) {
+				file.delete();
+			}
+		}
+
+		return true;
+	}
+
+	@RequestMapping(value = "/procedure/{id}/files", method = RequestMethod.DELETE)
+	public boolean removePeocedureFiles(@PathVariable("id") long id, HttpServletResponse res) {
 
 		if (RecipeRepo.findById(id).orElse(null) == null) {
 			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return false;
 		}
 
-		List<RecipeFile> recipeFiles = ReFiRepo.findByRecipeId(id);
-		for (RecipeFile recipeFile : recipeFiles) {
-			ReFiRepo.delete(recipeFile);
-			File file = new File(recipeFile.getFileName());
+		List<RecipeProcedureFile> RecipeProcedureFile = procedureRepo.findByProcedureId(id);
+		for (RecipeProcedureFile recipeProcedureFile : RecipeProcedureFile) {
+			procedureRepo.delete(recipeProcedureFile);
+			File file = new File(recipeProcedureFile.getFileName());
 			if (file.exists()) {
 				file.delete();
 			}
@@ -228,7 +281,10 @@ public class RecipeController {
 			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return false;
 		}
-
+		List<RecipeProcedureFile> RecipeProcedureFile = procedureRepo.findByProcedureId(id);
+		for (RecipeProcedureFile file : RecipeProcedureFile) {
+			procedureRepo.delete(file);
+		}
 		List<RecipeFile> files = ReFiRepo.findByRecipeId(id);
 		for (RecipeFile file : files) {
 			ReFiRepo.delete(file);
