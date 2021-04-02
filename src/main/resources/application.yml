@@ -1,7 +1,7 @@
 server:
   port: 8080
   
-# nohup java -jar -Dspring.profiles.active=prod myworkspace-0.0.1-SNAPSHOT.jar > myworkspace.log &
+# nohup java -jar -Dspring.profiles.active=prod mypageservice-0.0.1-SNAPSHOT.jar > mypageservice.log &
 # ./gradlew build && java -jar build/libs/myworkspace-0.0.1-SNAPSHOT.jar
 
 spring:
@@ -26,22 +26,6 @@ spring:
     username: rabbitmq
     password: password123
     
-cloud:
-  aws:
-    credentials:
-      accessKey: AKIAIRP7SQLQUEJKPVEA
-      secretKey: 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
----    
-cloud:
-  aws:
-    s3:
-      bucket: recipeimage-myservice
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-    credentials:
-      instanceProfile: true
 
 api:
   base-path: http://localhost:8080

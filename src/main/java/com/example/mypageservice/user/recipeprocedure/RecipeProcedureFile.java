@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +22,7 @@ public class RecipeProcedureFile {
 
 	private String fileName;
 	private String contentType;
-	private long procedureId;
+	private Long procedureId;
 //	public String getDataUrl() {
 //		return "http://localhost:8080" + "/recipe-files/" + this.id;
 //	}

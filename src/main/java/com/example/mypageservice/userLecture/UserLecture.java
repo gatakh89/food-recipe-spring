@@ -24,16 +24,17 @@ import lombok.NoArgsConstructor;
 @Entity
 public class UserLecture {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
 	private long userId;
 	private long lectureId;
 
 	private String lectureTitle;
 	private String lectureSummary;
 	private String lectureImageSRC;
-	
+
 	private long subscribedTime;
-	
+
 }

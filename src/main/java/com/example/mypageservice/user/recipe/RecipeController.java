@@ -138,13 +138,14 @@ public class RecipeController {
 		List<Recipe> list = RecipeRepo.findByRecipeId(recipeId);
 
 		for (Recipe recipe : list) {
-			for (RecipeFile Recipefile : recipe.getRecipefile()) {
-				for (RecipeProcedure recipeProcedure : recipe.getRecipeProcedure()) {
-					for (RecipeProcedureFile recipeProcedureFile : recipeProcedure.getRecipeProcedurefile()) {
-						recipeProcedureFile.setDataUrl(
-								apiConfig.getBasePath() + "/procedure-files/" + recipeProcedureFile.getId());
-					}
+			for (RecipeProcedure recipeProcedure : recipe.getRecipeProcedure()) {
+				for (RecipeProcedureFile recipeProcedureFile : recipeProcedure.getRecipeProcedurefile()) {
+					recipeProcedureFile
+							.setDataUrl(apiConfig.getBasePath() + "/procedure-files/" + recipeProcedureFile.getId());
 				}
+			}
+			for (RecipeFile Recipefile : recipe.getRecipefile()) {
+
 				Recipefile.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + Recipefile.getId());
 			}
 
@@ -163,7 +164,7 @@ public class RecipeController {
 //			for (RecipeProcedure recipeProcedure : recipe.getRecipeProcedure()) {
 //				for (RecipeProcedureFile recipeProcedureFile : recipeProcedure.getRecipeProcedurefile()) {
 //					recipeProcedureFile
-//							.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + recipeProcedureFile.getId());
+//							.setDataUrl(apiConfig.getBasePath() + "/procedure-files/" + recipeProcedureFile.getId());
 //				}
 //			}
 //
