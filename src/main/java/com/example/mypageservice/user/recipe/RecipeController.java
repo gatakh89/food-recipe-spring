@@ -127,30 +127,44 @@ public class RecipeController {
 	}
 
 	@RequestMapping(value = "/recipe/{userId}", method = RequestMethod.GET)
-	public List<Recipe> getRecipeByUserId(@PathVariable("userId") long userId) {
+	public List<Recipe> getRecipeByUsersId(@PathVariable("userId") long userId) {
+		List<Recipe> list = RecipeRepo.findByUserId(userId);
+		for (Recipe recipe : list) {
+			for (RecipeFile Recipefile : recipe.getRecipefile()) {
+				Recipefile.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + Recipefile.getId());
 
-		return RecipeRepo.findByUserId(userId);
+			}
+		}
+		System.out.println("----------------" + list);
+		return list;
 
 	}
+//
+//	@RequestMapping(value = "/recipe/{userId}", method = RequestMethod.GET)
+//	public List<Recipe> getRecipeByUserId(@PathVariable("userId") long userId) {
+//
+//		return RecipeRepo.findByUserId(userId);
+//
+//	}
 
 	@RequestMapping(value = "/recipes/{recipeId}", method = RequestMethod.GET)
 	public List<Recipe> getRecipeByRecipeId(@PathVariable("recipeId") long recipeId) {
 		List<Recipe> list = RecipeRepo.findByRecipeId(recipeId);
 
 		for (Recipe recipe : list) {
+			for (RecipeFile Recipefile : recipe.getRecipefile()) {
+
+				Recipefile.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + Recipefile.getId());
+			}
 			for (RecipeProcedure recipeProcedure : recipe.getRecipeProcedure()) {
 				for (RecipeProcedureFile recipeProcedureFile : recipeProcedure.getRecipeProcedurefile()) {
 					recipeProcedureFile
 							.setDataUrl(apiConfig.getBasePath() + "/procedure-files/" + recipeProcedureFile.getId());
 				}
 			}
-			for (RecipeFile Recipefile : recipe.getRecipefile()) {
-
-				Recipefile.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + Recipefile.getId());
-			}
 
 		}
-
+		System.out.println("----------------" + list);
 		return list;
 
 	}

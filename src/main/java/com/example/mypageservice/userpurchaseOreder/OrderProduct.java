@@ -23,7 +23,7 @@ public class OrderProduct {
 	private long id;
 
 //	private Long purchaseOrderId;
-
+	private String category;
 	private long productId;
 	private String productName;
 	private String productTitleImage;
