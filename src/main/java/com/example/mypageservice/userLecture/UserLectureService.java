@@ -25,7 +25,7 @@ public class UserLectureService {
 
 		;
 		System.out.println("------------------" + userLectures);
-		orderRepo.save(userLectures);
+		// orderRepo.save(userLectures);
 	}
 
 	@RabbitListener(queues = "lecture.unsubscribe")
@@ -37,7 +37,7 @@ public class UserLectureService {
 		if (userLectures == null) {
 			return;
 		}
-		orderRepo.delete(userLectures);
+		// orderRepo.delete(userLectures);
 	}
 
 }
