@@ -19,13 +19,13 @@ public class UserLectureService {
 	public void receiveOrder(UserLecture userLecture) {
 
 		UserLecture userLectures = UserLecture.builder().lectureId(userLecture.getLectureId())
-				.userId(userLecture.getUserId()).lectureImageSRC(userLecture.getLectureImageSRC())
+				.userId(userLecture.getUserId()).lectureImageSrc(userLecture.getLectureImageSrc())
 				.lectureSummary(userLecture.getLectureSummary()).lectureTitle(userLecture.getLectureTitle())
 				.subscribedTime(userLecture.getSubscribedTime()).build()
 
 		;
 		System.out.println("------------------" + userLectures);
-		// orderRepo.save(userLectures);
+		orderRepo.save(userLectures);
 	}
 
 	@RabbitListener(queues = "lecture.unsubscribe")
@@ -37,7 +37,7 @@ public class UserLectureService {
 		if (userLectures == null) {
 			return;
 		}
-		// orderRepo.delete(userLectures);
+		orderRepo.delete(userLectures);
 	}
 
 }

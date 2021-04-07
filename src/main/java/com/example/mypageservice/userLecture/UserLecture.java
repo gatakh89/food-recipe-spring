@@ -28,12 +28,12 @@ public class UserLecture {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	private long userId;
+	private String userId;
 	private long lectureId;
 
 	private String lectureTitle;
 	private String lectureSummary;
-	private String lectureImageSRC;
+	private String lectureImageSrc;
 
 	private long subscribedTime;
 

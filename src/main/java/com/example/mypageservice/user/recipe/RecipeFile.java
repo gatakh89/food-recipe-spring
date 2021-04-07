@@ -24,13 +24,11 @@ public class RecipeFile {
 	private String fileName;
 	private String contentType;
 	private long recipeId;
-//	private String imagePath;
-//	private String imageFileName;
 
 //	public String getDataUrl() {
-//		return "http://localhost:8080" + "/recipe-files/" + this.id;
+//		return "http://192.168.0.29:8080" + "/recipe-files/" + this.id;
 //	}
-
+//
 	private String dataUrl;
 
 }

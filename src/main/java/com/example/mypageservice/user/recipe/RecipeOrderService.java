@@ -20,7 +20,8 @@ public class RecipeOrderService {
 	}
 
 	public void sendOrder(long recipeId) {
-		rabbit.convertAndSend("recipe.order", recipeId);
+		System.out.println("--------------COMMERCE LOG-----------");
+		rabbit.convertAndSend("recipe.order.id", recipeId);
 
 	}
 

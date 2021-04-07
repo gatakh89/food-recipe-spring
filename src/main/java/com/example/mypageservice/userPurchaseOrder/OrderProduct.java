@@ -1,4 +1,4 @@
-package com.example.mypageservice.userpurchaseOreder;
+package com.example.mypageservice.userPurchaseOrder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

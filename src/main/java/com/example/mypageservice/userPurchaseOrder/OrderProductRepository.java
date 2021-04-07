@@ -1,4 +1,4 @@
-package com.example.mypageservice.userpurchaseOreder;
+package com.example.mypageservice.userPurchaseOrder;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

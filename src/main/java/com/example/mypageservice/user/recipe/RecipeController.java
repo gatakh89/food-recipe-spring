@@ -32,6 +32,8 @@ import com.example.mypageservice.user.recipeprocedure.RecipeProcedure;
 import com.example.mypageservice.user.recipeprocedure.RecipeProcedureFile;
 import com.example.mypageservice.user.recipeprocedure.RecipeProcedureFileRepository;
 import com.example.mypageservice.user.recipeprocedure.RecipeProcedureRepository;
+import com.example.mypageservice.user.security.Auth;
+import com.example.mypageservice.user.security.Profile;
 import com.example.mypageservice.user.stuff.Stuff;
 import com.example.mypageservice.user.stuff.StuffRepository;
 
@@ -126,9 +128,21 @@ public class RecipeController {
 
 	}
 
-	@RequestMapping(value = "/recipe/{userId}", method = RequestMethod.GET)
-	public List<Recipe> getRecipeByUsersId(@PathVariable("userId") long userId) {
-		List<Recipe> list = RecipeRepo.findByUserId(userId);
+	@Auth
+	@RequestMapping(value = "/recipe", method = RequestMethod.GET)
+	public List<Recipe> getRecipeByUsersId(HttpServletRequest req) {
+
+		Profile profile = (Profile) req.getAttribute("profile");
+//		System.out.println(profile);
+
+		// 접속한 사용자의 작성한 글 보기
+		// /users/kdkcom@naver.com/feeds ---- 매개변수값으로 조회하면 안 됨.
+		// /users/feeds --- 세션에 저장되어있는 사용자 id 값으로 필터를 해야됨.
+
+		// 사용자 userId와 팔로잉한 userId로 작성된 글 보기
+		// WHERE user_id IN ('...', '...', '...', .....)
+		// finByUserIdIn(List<String> userIds)
+		List<Recipe> list = RecipeRepo.findByUserId(profile.getUserId());
 		for (Recipe recipe : list) {
 			for (RecipeFile Recipefile : recipe.getRecipefile()) {
 				Recipefile.setDataUrl(apiConfig.getBasePath() + "/recipe-files/" + Recipefile.getId());
@@ -169,31 +183,32 @@ public class RecipeController {
 
 	}
 
-//	@RequestMapping(value = "/RecipeProcedureFile/{recipeId}", method = RequestMethod.GET)
-//	public List<Recipe> getRecipeProcedureFileRecipeId(@PathVariable("recipeId") long recipeId) {
-//		List<Recipe> list = RecipeRepo.findByRecipeId(recipeId);
-//
-//		for (Recipe recipe : list) {
-//
-//			for (RecipeProcedure recipeProcedure : recipe.getRecipeProcedure()) {
-//				for (RecipeProcedureFile recipeProcedureFile : recipeProcedure.getRecipeProcedurefile()) {
-//					recipeProcedureFile
-//							.setDataUrl(apiConfig.getBasePath() + "/procedure-files/" + recipeProcedureFile.getId());
-//				}
-//			}
-//
-//		}
-//
-//		return list;
-//
-//	}
+	@RequestMapping(value = "/RecipeProcedureFile/{recipeId}", method = RequestMethod.GET)
+	public List<Recipe> getRecipeProcedureFileRecipeId(@PathVariable("recipeId") long recipeId) {
+		List<Recipe> list = RecipeRepo.findByRecipeId(recipeId);
 
+		for (Recipe recipe : list) {
+
+			for (RecipeProcedure recipeProcedure : recipe.getRecipeProcedure()) {
+				for (RecipeProcedureFile recipeProcedureFile : recipeProcedure.getRecipeProcedurefile()) {
+					recipeProcedureFile
+							.setDataUrl(apiConfig.getBasePath() + "/procedure-files/" + recipeProcedureFile.getId());
+				}
+			}
+
+		}
+
+		return list;
+
+	}
+
+	@Auth
 	@RequestMapping(value = "/recipe", method = RequestMethod.POST)
-	public Recipe addRecipe(@RequestBody Recipe recipe) {
+	public Recipe addRecipe(@RequestBody Recipe recipe, HttpServletRequest req) {
+		Profile profile = (Profile) req.getAttribute("profile");
+		recipe.setUserId(profile.getUserId());
 		RecipeRepo.save(recipe);
-//		service.sendsOrder(recipe.getRecipeId(), recipe.getRecipeName(), recipe.getCategory(), recipe.getStuffRecipe());
-
-//		service.sendOrder(recipe);
+		service.sendOrder(recipe);
 		System.out.println("----------------" + recipe);
 		return recipe;
 
@@ -215,6 +230,7 @@ public class RecipeController {
 		FileCopyUtils.copy(file.getBytes(), new File(FILE_PATH.resolve(file.getOriginalFilename()).toString()));
 
 		RecipeFile recipeFile = RecipeFile.builder().recipeId(id).fileName(file.getOriginalFilename())
+
 				.contentType(file.getContentType()).build();
 
 		ReFiRepo.save(recipeFile);
@@ -305,7 +321,7 @@ public class RecipeController {
 			ReFiRepo.delete(file);
 		}
 
-//		service.sendsOrder(recipe.getRecipeId());
+		service.sendOrder(recipe.getRecipeId());
 		RecipeRepo.deleteById(id);
 
 		return true;

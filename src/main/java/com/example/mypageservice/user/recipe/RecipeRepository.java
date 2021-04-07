@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 //	public List<Recipe> findById(long id);
 
-	public List<Recipe> findByUserId(long userId);
+	public List<Recipe> findByUserId(String userId);
 
 	public List<Recipe> findByRecipeId(long recipeId);
 }

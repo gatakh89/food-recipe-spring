@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserLectureRepository extends JpaRepository<UserLecture, Long> {
 	// List<UserLecture> findByLectureId (long lectureId);
+	List<UserLecture> findByUserId(String userId);
 
 	UserLecture findByLectureId(long lectureId);
 

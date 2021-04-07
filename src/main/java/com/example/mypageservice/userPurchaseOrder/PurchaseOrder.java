@@ -1,4 +1,4 @@
-package com.example.mypageservice.userpurchaseOreder;
+package com.example.mypageservice.userPurchaseOrder;
 
 import java.util.Date;
 import java.util.List;
@@ -27,7 +27,7 @@ public class PurchaseOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
+	private String userId;
 	private Date orderDate;
 
 	@OneToMany(cascade = CascadeType.ALL)

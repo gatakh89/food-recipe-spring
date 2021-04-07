@@ -1,4 +1,4 @@
-package com.example.mypageservice.userpurchaseOreder;
+package com.example.mypageservice.userPurchaseOrder;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,8 @@ public class PurchaseOrderService {
 	public void receiveOrder(PurchaseOrder purchaseOrder) {
 
 		PurchaseOrder purchaseOrders = PurchaseOrder.builder().id(purchaseOrder.getId())
-				.orderDate(purchaseOrder.getOrderDate()).orderProduct(purchaseOrder.getOrderProduct()).build();
+				.userId(purchaseOrder.getUserId()).orderDate(purchaseOrder.getOrderDate())
+				.orderProduct(purchaseOrder.getOrderProduct()).build();
 		System.out.println("------------------" + purchaseOrders);
 		orderRepo.save(purchaseOrders);
 	}

@@ -31,13 +31,12 @@ public class Recipe {
 	private long recipeId;
 
 	private String recipeName;
-	private long userId;
+	private String userId;
 
 	private String image;
 	private String tip;
 	private String Explanation;
 	private String category;
-	private String dataUrl;
 
 	@OneToMany
 	@JoinColumn(name = "recipeId")
