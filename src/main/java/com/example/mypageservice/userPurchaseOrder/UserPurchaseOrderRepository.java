@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.example.mypageservice.userLecture.UserLecture;
 
 @Repository
-public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long> {
-	List<PurchaseOrder> findByUserId(String userId);
+public interface UserPurchaseOrderRepository extends JpaRepository<UserPurchaseOrder, Long> {
+	List<UserPurchaseOrder> findByUserId(String userId);
 }

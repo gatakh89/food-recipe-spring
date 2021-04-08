@@ -17,10 +17,10 @@ import com.example.mypageservice.userLecture.UserLectureRepository;
 @RestController
 public class UserPurchaseOrderController {
 
-	private PurchaseOrderRepository PurchaseRepo;
+	private UserPurchaseOrderRepository PurchaseRepo;
 
 	@Autowired
-	public UserPurchaseOrderController(PurchaseOrderRepository PurchaseRepo, UserLectureRepository LectureRepo) {
+	public UserPurchaseOrderController(UserPurchaseOrderRepository PurchaseRepo, UserLectureRepository LectureRepo) {
 		this.PurchaseRepo = PurchaseRepo;
 
 	}
@@ -32,7 +32,7 @@ public class UserPurchaseOrderController {
 //	}
 	@Auth
 	@RequestMapping(value = "/purchase-order", method = RequestMethod.GET)
-	public List<PurchaseOrder> getUserLecture(HttpServletRequest req) {
+	public List<UserPurchaseOrder> getUserPurchase(HttpServletRequest req) {
 		Profile profile = (Profile) req.getAttribute("profile");
 		return PurchaseRepo.findByUserId(profile.getUserId());
 

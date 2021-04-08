@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class PurchaseOrder {
+public class UserPurchaseOrder {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +32,5 @@ public class PurchaseOrder {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "purchaseOrderId")
-	private List<OrderProduct> orderProduct;
+	private List<UserOrderProduct> orderProduct;
 }

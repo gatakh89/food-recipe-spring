@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class OrderProduct {
+public class UserOrderProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
