@@ -51,8 +51,6 @@ public class RecipeController {
 	@Autowired
 	private ApiConfiguration apiConfig;
 
-	@Autowired // UserRepository UserRepo,
-
 	public RecipeController(RecipeRepository RecipeRepo, StuffRepository StuffRepo, CategoryRepository CateRepo,
 			RecipeFileRepsitory ReFiRepo, RecipeProcedureRepository proRepo, RecipeOrderService service,
 			RecipeProcedureFileRepository procedureRepo) {
@@ -133,15 +131,6 @@ public class RecipeController {
 	public List<Recipe> getRecipeByUsersId(HttpServletRequest req) {
 
 		Profile profile = (Profile) req.getAttribute("profile");
-//		System.out.println(profile);
-
-		// 접속한 사용자의 작성한 글 보기
-		// /users/kdkcom@naver.com/feeds ---- 매개변수값으로 조회하면 안 됨.
-		// /users/feeds --- 세션에 저장되어있는 사용자 id 값으로 필터를 해야됨.
-
-		// 사용자 userId와 팔로잉한 userId로 작성된 글 보기
-		// WHERE user_id IN ('...', '...', '...', .....)
-		// finByUserIdIn(List<String> userIds)
 		List<Recipe> list = RecipeRepo.findByUserId(profile.getUserId());
 		for (Recipe recipe : list) {
 			for (RecipeFile Recipefile : recipe.getRecipefile()) {
@@ -153,13 +142,6 @@ public class RecipeController {
 		return list;
 
 	}
-//
-//	@RequestMapping(value = "/recipe/{userId}", method = RequestMethod.GET)
-//	public List<Recipe> getRecipeByUserId(@PathVariable("userId") long userId) {
-//
-//		return RecipeRepo.findByUserId(userId);
-//
-//	}
 
 	@RequestMapping(value = "/recipes/{recipeId}", method = RequestMethod.GET)
 	public List<Recipe> getRecipeByRecipeId(@PathVariable("recipeId") long recipeId) {
@@ -263,14 +245,14 @@ public class RecipeController {
 	}
 
 	@RequestMapping(value = "/recipe/{id}/recipe-files", method = RequestMethod.DELETE)
-	public boolean removeRecipeFiles(@PathVariable("id") long recipeId, HttpServletResponse res) {
+	public boolean removeRecipeFiles(@PathVariable("id") long id, HttpServletResponse res) {
 
-		if (RecipeRepo.findById(recipeId).orElse(null) == null) {
+		if (RecipeRepo.findById(id).orElse(null) == null) {
 			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return false;
 		}
 
-		List<RecipeFile> recipeFiles = ReFiRepo.findByRecipeId(recipeId);
+		List<RecipeFile> recipeFiles = ReFiRepo.findByRecipeId(id);
 		for (RecipeFile recipeFile : recipeFiles) {
 			ReFiRepo.delete(recipeFile);
 			File file = new File(recipeFile.getFileName());

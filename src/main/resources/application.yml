@@ -39,10 +39,26 @@ api:
 spring:
   profiles: prod 
   redis:
-    host: 13.209.41.162
+    host: 15.164.171.148
     port: 6379
     password: foobared
+    
+eureka:
+  client:
+    service-url:
+      # 유레카 서버의 주소를 작성
+      # 유레카 설치된 ec2 ip 주소:8761/eureka/
+      defaultZone: http://3.36.141.39:8761/eureka/
+  instance:
+      # 본인 서비스의 ec2 ip 주소
+    hostname: 13.209.41.162
+    
   
 api:
- base-path: http://ec2-13-209-41-162.ap-northeast-2.compute.amazonaws.com:8080
+ base-path: http://13.209.41.162:8080
 
+
+# 클라이언트 부하 분산 활성화
+ribbon:
+  eureka:
+    enabled: true
