@@ -52,8 +52,8 @@ eureka:
       defaultZone: http://3.36.141.39:8761/eureka/
   instance:
       # 본인 서비스의 ec2 ip 주소
-    hostname: 13.209.41.162
-    
+    hostname: 15.164.171.148
+      
   
 api:
  base-path: http://13.209.41.162:8080
