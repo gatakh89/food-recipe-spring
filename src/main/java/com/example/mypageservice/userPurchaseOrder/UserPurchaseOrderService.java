@@ -20,7 +20,7 @@ public class UserPurchaseOrderService {
 		UserPurchaseOrder purchaseOrders = UserPurchaseOrder.builder().id(purchaseOrder.getId())
 				.userId(purchaseOrder.getUserId()).orderDate(purchaseOrder.getOrderDate())
 				.orderProduct(purchaseOrder.getOrderProduct()).build();
-		System.out.println("------------------" + purchaseOrders);
+		// System.out.println("------------------" + purchaseOrders);
 		orderRepo.save(purchaseOrders);
 	}
 }

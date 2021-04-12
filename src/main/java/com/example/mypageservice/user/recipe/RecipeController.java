@@ -138,7 +138,7 @@ public class RecipeController {
 
 			}
 		}
-		System.out.println("----------------" + list);
+		// // System.out.println("----------------" + list);
 		return list;
 
 	}
@@ -160,7 +160,7 @@ public class RecipeController {
 			}
 
 		}
-		System.out.println("----------------" + list);
+		// // System.out.println("----------------" + list);
 		return list;
 
 	}
@@ -184,14 +184,26 @@ public class RecipeController {
 
 	}
 
+	@RequestMapping(value = "/recipe-post-man", method = RequestMethod.POST)
+	public Recipe addRecipePostMan(@RequestBody Recipe recipe, HttpServletRequest req) {
+
+		RecipeRepo.save(recipe);
+		service.sendOrder(recipe);
+		// // System.out.println("----------------" + recipe);
+		return recipe;
+
+	}
+
 	@Auth
 	@RequestMapping(value = "/recipe", method = RequestMethod.POST)
 	public Recipe addRecipe(@RequestBody Recipe recipe, HttpServletRequest req) {
 		Profile profile = (Profile) req.getAttribute("profile");
 		recipe.setUserId(profile.getUserId());
+		recipe.setUserNickName(profile.getName());
+
 		RecipeRepo.save(recipe);
 		service.sendOrder(recipe);
-		System.out.println("----------------" + recipe);
+		// // System.out.println("----------------" + recipe);
 		return recipe;
 
 	}
@@ -286,7 +298,7 @@ public class RecipeController {
 
 	@RequestMapping(value = "/recipe/{id}", method = RequestMethod.DELETE)
 	public boolean removeRecipe(@PathVariable("id") long id, HttpServletResponse res) {
-		System.out.println(id);
+		// // System.out.println(id);
 
 		Recipe recipe = RecipeRepo.findById(id).orElse(null);
 
@@ -297,7 +309,9 @@ public class RecipeController {
 		List<RecipeProcedureFile> RecipeProcedureFile = procedureRepo.findByProcedureId(id);
 		for (RecipeProcedureFile file : RecipeProcedureFile) {
 			procedureRepo.delete(file);
+			// // System.out.println("-------------");
 		}
+
 		List<RecipeFile> files = ReFiRepo.findByRecipeId(id);
 		for (RecipeFile file : files) {
 			ReFiRepo.delete(file);

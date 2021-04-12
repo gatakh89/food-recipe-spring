@@ -14,13 +14,13 @@ public class RecipeOrderService {
 	}
 
 	public void sendOrder(Recipe order) {
-		System.out.println("--------------COMMERCE LOG-----------");
+		// System.out.println("--------------COMMERCE LOG-----------");
 		rabbit.convertAndSend("recipe.order", order);
 
 	}
 
 	public void sendOrder(long recipeId) {
-		System.out.println("--------------COMMERCE LOG-----------");
+		// System.out.println("--------------COMMERCE LOG-----------");
 		rabbit.convertAndSend("recipe.order.id", recipeId);
 
 	}

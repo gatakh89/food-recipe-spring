@@ -22,8 +22,9 @@ spring:
 #    properties:
 #     hibernate: generate_statistics=true 
   redis:
-    host: 127.0.0.1
+    host: 15.164.171.148
     port: 6379  
+    password: foobared
    
   rabbitmq:
     host: ec2-13-125-229-154.ap-northeast-2.compute.amazonaws.com

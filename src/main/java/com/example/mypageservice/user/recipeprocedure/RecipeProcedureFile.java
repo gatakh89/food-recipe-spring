@@ -22,7 +22,7 @@ public class RecipeProcedureFile {
 
 	private String fileName;
 	private String contentType;
-	private long procedureId;
+	private Long procedureId;
 
 //	public String getDataUrl() {
 //		return "http://192.168.0.29:8080" + "/procedure-files/" + this.id;

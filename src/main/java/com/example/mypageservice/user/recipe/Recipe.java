@@ -32,6 +32,7 @@ public class Recipe {
 
 	private String recipeName;
 	private String userId;
+	private String userNickName;
 
 	private String image;
 	private String tip;
