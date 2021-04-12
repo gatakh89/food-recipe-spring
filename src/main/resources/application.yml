@@ -43,6 +43,8 @@ spring:
     host: 15.164.171.148
     port: 6379
     password: foobared
+  api:
+    base-path: http://13.209.41.162:8080
     
 eureka:
   client:
@@ -55,8 +57,7 @@ eureka:
     hostname: 15.164.171.148
       
   
-api:
- base-path: http://13.209.41.162:8080
+
 
 
 # 클라이언트 부하 분산 활성화
